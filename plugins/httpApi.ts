@@ -1,19 +1,38 @@
-import axios, { type AxiosInstance, type AxiosError } from 'axios'
+import { createHttpError, type HttpError } from '@/types/http-error'
+import axios, { type AxiosInstance } from 'axios'
 
 const httpAPI: AxiosInstance = axios.create()
 // BUG: ta undefined
 // httpAPI.defaults.baseURL = process.env.BASE_API_URL
-httpAPI.defaults.baseURL = "https://2955-2804-6660-ff21-6700-1477-4047-d220-2.ngrok-free.app"
+httpAPI.defaults.baseURL = "https://3a5c-2804-6660-ff21-6700-1477-4047-d220-2.ngrok-free.app"
 
 httpAPI.interceptors.request.use(
   (config) => {
     console.log('vou configurar os headers', httpAPI.defaults.baseURL)
-    // TODO: Puxar as credenciais de alguma store no app e botar aqui
     return config
-  },
-  (error: AxiosError) => {
-    console.error(error)
-    Promise.reject(error)
+  }
+)
+
+httpAPI.interceptors.response.use(
+  (response) => response,
+  (error: unknown): Promise<never> => {
+    let httpError: HttpError
+
+    if (axios.isAxiosError(error)) {
+      httpError = createHttpError(
+        error.response?.status ?? 0,
+        error.message,
+        error.response?.data
+      )
+    } else {
+      httpError = createHttpError(
+        0,
+        error instanceof Error ? error.message : 'Unknown error occurred',
+        undefined
+      )
+    }
+
+    return Promise.reject(httpError)
   }
 )
 

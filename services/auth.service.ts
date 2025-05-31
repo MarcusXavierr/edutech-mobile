@@ -1,5 +1,7 @@
 import { AuthUser, User } from '@/models/user'
-import httpApi from '../plugins/httpApi'
+import httpApi from '@/plugins/httpApi'
+import { type HttpError } from '@/types/http-error'
+import { failure, type Result, success } from '@/types/result'
 
 export type LoginResponse = {
   accessToken: string
@@ -11,15 +13,20 @@ export type RegisterResponse = LoginResponse
 export type LoginPayload = Omit<AuthUser, "name">
 export type RegisterPayload = Omit<AuthUser, "name">
 
-// TODO: Pensar numa validação de erros pra cá
-export const login = async (payload: LoginPayload): Promise<LoginResponse> => {
-  const res = await httpApi.post<LoginResponse>("/login", payload)
-  return res.data
+/**
+ * Authenticates user with email and password
+ */
+export const login = (payload: LoginPayload): Promise<Result<LoginResponse, HttpError>> => {
+  return httpApi.post<LoginResponse>("/login", payload)
+    .then(res => success(res.data))
+    .catch((error: HttpError) => failure(error))
 }
 
-// INFO: Só vamos omitir o nome temporariamente
-export const register = async (payload: RegisterPayload): Promise<RegisterResponse> => {
-  console.log('fui chamado', payload)
-  const res = await httpApi.post<LoginResponse>("/users", payload)
-  return res.data
+/**
+ * Registers a new user account
+ */
+export const register = (payload: RegisterPayload): Promise<Result<RegisterResponse, HttpError>> => {
+  return httpApi.post<LoginResponse>("/users", payload)
+    .then(res => success(res.data))
+    .catch((error: HttpError) => failure(error))
 }
