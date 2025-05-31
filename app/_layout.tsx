@@ -1,23 +1,25 @@
-import { AuthProvider } from "@/plugins/auth-context";
+import { AuthProvider, useAuth } from "@/plugins/auth-context";
 import { Stack, useRouter } from "expo-router";
 import React, { ReactNode, useEffect } from "react";
 import "../global.css";
 
 function RouteGuard({ children }: { children: ReactNode }) {
   const router = useRouter();
-  const isAuth = false;
+  const { isAuthenticated, isLoading } = useAuth();
 
   useEffect(() => {
-    // Small delay to ensure the navigator is mounted
-    // BUG: Fix this later
-    const timer = setTimeout(() => {
-      if (!isAuth) {
+    if (!isLoading) {
+      if (!isAuthenticated) {
         router.replace("/auth");
+      } else {
+        router.replace("/");
       }
-    }, 100);
+    }
+  }, [isAuthenticated, isLoading, router]);
 
-    return () => clearTimeout(timer);
-  }, [isAuth, router]);
+  if (isLoading) {
+    return null
+  }
 
   return <>{children}</>;
 }

@@ -8,7 +8,6 @@ export type LoginResponse = {
   user: User
 }
 
-// TODO: Talvez criar uma mônada pra lidar com esse erro, sei lá, conversa com o gepeto pra ele pensar numa boa solução pro meu contexto
 export type RegisterResponse = LoginResponse
 export type LoginPayload = Omit<AuthUser, "name">
 export type RegisterPayload = Omit<AuthUser, "name">
