@@ -1,35 +1,47 @@
 import { useAuth } from "@/plugins/auth-context"
+import { LoginResponse } from "@/services/auth.service"
+import { HttpError } from "@/types/http-error"
+import { isFailure, isSuccess, Result } from "@/types/result"
 import { useState } from "react"
-import { KeyboardAvoidingView, Platform, View, StyleSheet } from "react-native"
+import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native"
 
-import { Text, TextInput, Button, useTheme } from "react-native-paper"
+import { Button, Text, TextInput, useTheme } from "react-native-paper"
 
 export default function AuthScreen() {
   const [isSignedUp, setIsSignedUp] = useState<boolean>(false)
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
-  const [error, setError] = useState<string|null>()
+  const [error, setError] = useState<string | null>()
   const theme = useTheme()
   const authContext = useAuth()
 
   const handleAuth = async () => {
     if (!email || !password) {
       setError("Por favor, preencha o formulário corretamente")
+      return
     }
 
     if (password.length < 6) {
       setError("A senha precisa ter mais de 6 dígitos")
+      return
     }
 
     setError(null)
-    let data
+    let data: Result<LoginResponse, HttpError>
     if (isSignedUp) {
       data = await authContext.signIn({ email, password })
     } else {
       data = await authContext.signUp({ email, password })
     }
 
-    console.log('data', data)
+    if (isFailure(data)) {
+      setError(data.error.userMessage)
+      console.log(data.error)
+    }
+
+    if (isSuccess(data)) {
+      console.log("data", data)
+    }
   }
 
   const handleSwitch = () => setIsSignedUp((prev) => !prev)
@@ -57,7 +69,7 @@ export default function AuthScreen() {
           style={styles.input}
           label="Senha"
           autoCapitalize="none"
-          keyboardType="visible-password"
+          secureTextEntry
           mode="outlined"
           onChangeText={setPassword}
         />
@@ -73,8 +85,8 @@ export default function AuthScreen() {
           style={styles.switchModeButton}
         >
           {isSignedUp
-            ? "Já tem uma conta? Faça o Login!"
-            : "Ainda não tem uma conta? Faça seu cadastro!"}
+            ? "Ainda não tem uma conta? Faça seu cadastro!"
+            : "Já tem uma conta? Faça o Login!"}
         </Button>
       </View>
     </KeyboardAvoidingView>
