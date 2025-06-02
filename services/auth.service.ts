@@ -4,19 +4,20 @@ import { type HttpError } from '@/types/http-error'
 import { failure, type Result, success } from '@/types/result'
 
 export type LoginResponse = {
-  accessToken: string
+  access_token: string
   user: User
+  refresh_token: string
 }
 
 export type RegisterResponse = LoginResponse
-export type LoginPayload = Omit<AuthUser, "name">
-export type RegisterPayload = Omit<AuthUser, "name">
+export type LoginPayload = Omit<AuthUser, "email">
+export type RegisterPayload = AuthUser
 
 /**
  * Authenticates user with email and password
  */
 export const login = (payload: LoginPayload): Promise<Result<LoginResponse, HttpError>> => {
-  return httpApi.post<LoginResponse>("/login", payload)
+  return httpApi.post<LoginResponse>("/users/login", payload)
     .then(res => success(res.data))
     .catch((error: HttpError) => failure(error))
 }
@@ -25,7 +26,7 @@ export const login = (payload: LoginPayload): Promise<Result<LoginResponse, Http
  * Registers a new user account
  */
 export const register = (payload: RegisterPayload): Promise<Result<RegisterResponse, HttpError>> => {
-  return httpApi.post<LoginResponse>("/users", payload)
+  return httpApi.post<RegisterResponse>("/users/", payload)
     .then(res => success(res.data))
     .catch((error: HttpError) => failure(error))
 }

@@ -1,7 +1,7 @@
 export type User = {
-  id: number
+  id: string
   email: string
-  name?: string
+  username: string
 }
 
 export type AuthUser = Omit<User, "id"> & { password: string }

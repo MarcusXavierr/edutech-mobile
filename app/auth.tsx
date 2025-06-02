@@ -11,12 +11,19 @@ export default function AuthScreen() {
   const [isSignedUp, setIsSignedUp] = useState<boolean>(false)
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
+  const [username, setUsername] = useState<string>("")
   const [error, setError] = useState<string | null>()
   const theme = useTheme()
   const authContext = useAuth()
 
   const handleAuth = async () => {
-    if (!email || !password) {
+    const validateFill = (isLoginScreen: boolean) => {
+      if(isLoginScreen)
+        return !password || !username
+      return !email || !password || !username
+    }
+
+    if (validateFill(isSignedUp)) {
       setError("Por favor, preencha o formulário corretamente")
       return
     }
@@ -29,9 +36,9 @@ export default function AuthScreen() {
     setError(null)
     let data: Result<LoginResponse, HttpError>
     if (isSignedUp) {
-      data = await authContext.signIn({ email, password })
+      data = await authContext.signIn({ username, password })
     } else {
-      data = await authContext.signUp({ email, password })
+      data = await authContext.signUp({ email, password, username })
     }
 
     if (isFailure(data)) {
@@ -57,13 +64,24 @@ export default function AuthScreen() {
         </Text>
         <TextInput
           style={styles.input}
-          label="Email"
+          label="Nome"
           autoCapitalize="none"
-          keyboardType="email-address"
-          placeholder="email@example.com"
           mode="outlined"
-          onChangeText={setEmail}
+          onChangeText={setUsername}
         />
+
+        {
+          !isSignedUp &&  // Gambiarra pq não temos v-if
+          <TextInput
+            style={styles.input}
+            label="Email"
+            autoCapitalize="none"
+            keyboardType="email-address"
+            placeholder="email@example.com"
+            mode="outlined"
+            onChangeText={setEmail}
+          />
+        }
 
         <TextInput
           style={styles.input}

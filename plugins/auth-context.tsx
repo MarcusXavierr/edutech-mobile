@@ -98,7 +98,7 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
     const result = await register(payload)
 
     if (result.success) {
-      await saveAuthData(result.data.accessToken, result.data.user)
+      await saveAuthData(result.data.access_token, result.data.user)
     }
 
     return result
@@ -111,7 +111,7 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
     const result = await login(payload)
 
     if (result.success) {
-      await saveAuthData(result.data.accessToken, result.data.user)
+      await saveAuthData(result.data.access_token, result.data.user)
     }
 
     return result

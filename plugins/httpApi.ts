@@ -4,7 +4,7 @@ import axios, { type AxiosInstance } from 'axios'
 const httpAPI: AxiosInstance = axios.create()
 // BUG: ta undefined
 // httpAPI.defaults.baseURL = process.env.BASE_API_URL
-httpAPI.defaults.baseURL = "https://3a5c-2804-6660-ff21-6700-1477-4047-d220-2.ngrok-free.app"
+httpAPI.defaults.baseURL = "http://35.173.222.48:8080"
 
 httpAPI.interceptors.request.use(
   (config) => {
