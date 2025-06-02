@@ -3,7 +3,7 @@ import { Text, View, StyleSheet } from "react-native";
 export default function Index() {
   return (
     <View style={styles.view}>
-      <Text>TODO: Remover isso do histórico de commits</Text>
+      <Text>TODO: Implementar a página inicial</Text>
     </View>
   );
 }

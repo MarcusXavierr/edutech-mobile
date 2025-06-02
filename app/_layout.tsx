@@ -28,10 +28,17 @@ export default function RootLayout() {
   return (
     <AuthProvider>
       <RouteGuard>
-        <Stack>
+        <Stack screenOptions={tabOptions}>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         </Stack>
       </RouteGuard>
     </AuthProvider>
   );
 }
+
+
+// TODO: Tipar melhor
+const tabOptions = {
+  headerTitleAlign: "center",
+  headerTitle: 'Edutech'
+} as any

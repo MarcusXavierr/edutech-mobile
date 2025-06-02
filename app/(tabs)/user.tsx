@@ -9,7 +9,7 @@ export default function LoginScreen() {
     <View style={styles.container}>
       <View style={styles.content}>
         <Text variant="headlineMedium" style={styles.title}>
-          Some daqui meo
+          Página temporária do usuário
         </Text>
         <Button onPress={signOut} mode="contained">
           Fazer Logout
