@@ -1,3 +1,4 @@
+import LoadingSplash from "@/components/LoadingSplash"
 import { LoginResponse } from "@/services/auth.service"
 import { useAuth } from "@/store/auth-context"
 import { HttpError } from "@/types/http-error"
@@ -58,6 +59,7 @@ export default function AuthScreen() {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
+      <LoadingSplash visible={authContext.isLoading} />
       <View style={styles.content}>
         <Text style={styles.title} variant="headlineMedium">
           {isSignedUp ? "Bem vindo de volta" : "Criar conta"}
