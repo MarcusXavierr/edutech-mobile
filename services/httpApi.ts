@@ -4,11 +4,11 @@ import axios, { type AxiosInstance } from 'axios'
 const httpAPI: AxiosInstance = axios.create()
 // BUG: ta undefined
 // httpAPI.defaults.baseURL = process.env.BASE_API_URL
-httpAPI.defaults.baseURL = "http://35.173.222.48:8080"
+httpAPI.defaults.baseURL = "http://18.209.31.113:8080"
 
 httpAPI.interceptors.request.use(
   (config) => {
-    console.log('vou configurar os headers', httpAPI.defaults.baseURL)
+    console.log('vou configurar os headers', httpAPI.defaults.baseURL, config.url)
     return config
   }
 )

@@ -1,5 +1,5 @@
 import { AuthUser, User } from '@/models/user'
-import httpApi from '@/plugins/httpApi'
+import httpApi from '@/services/httpApi'
 import { type HttpError } from '@/types/http-error'
 import { failure, type Result, success } from '@/types/result'
 

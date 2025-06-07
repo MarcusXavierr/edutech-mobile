@@ -1,6 +1,6 @@
-import { useAuth } from "@/plugins/auth-context"
-import { View, StyleSheet } from "react-native";
-import { Text, Button } from 'react-native-paper'
+import { useAuth } from "@/store/auth-context";
+import { StyleSheet, View } from "react-native";
+import { Button, Text } from 'react-native-paper';
 
 export default function LoginScreen() {
   const { signOut } = useAuth()

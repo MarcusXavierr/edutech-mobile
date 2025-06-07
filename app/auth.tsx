@@ -1,5 +1,5 @@
-import { useAuth } from "@/plugins/auth-context"
 import { LoginResponse } from "@/services/auth.service"
+import { useAuth } from "@/store/auth-context"
 import { HttpError } from "@/types/http-error"
 import { isFailure, isSuccess, Result } from "@/types/result"
 import { useState } from "react"

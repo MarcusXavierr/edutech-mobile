@@ -4,7 +4,7 @@ import { type HttpError } from "@/types/http-error"
 import { type Result } from "@/types/result"
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { createContext, useContext, useEffect, useState } from "react"
-import httpApi from "./httpApi"
+import httpApi from "../services/httpApi"
 
 type AuthContextType = {
   user?: User,
