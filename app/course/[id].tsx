@@ -1,8 +1,18 @@
 import { Course, useCourseStore } from '@/store/course';
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { Dimensions, ScrollView, StyleSheet, View } from 'react-native';
 import { Card, Text } from 'react-native-paper';
+import YoutubePlayer from 'react-native-youtube-iframe';
+
+const { width: screenWidth } = Dimensions.get('window');
+
+// Function to extract YouTube video ID from URL
+const getYouTubeVideoId = (url: string): string => {
+  const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+  const match = url.match(regex);
+  return match ? match[1] : '';
+};
 
 export default function CourseDetails() {
   const { id } = useLocalSearchParams();
@@ -24,38 +34,77 @@ export default function CourseDetails() {
   if (!course) {
     return (
       <View style={styles.container}>
-        <Text variant="headlineLarge">Course Not Found</Text>
-        <Text variant="bodyMedium">TODO: Add loading state or error handling</Text>
+        <Text variant="headlineLarge">Curso Não Encontrado</Text>
+        <Text variant="bodyMedium">TODO: Adicionar estado de carregamento ou tratamento de erro</Text>
       </View>
     );
   }
 
   return (
     <ScrollView style={styles.scrollView}>
-      <View style={styles.container}>
-        <Card style={styles.card}>
-          <Card.Cover source={{ uri: course.coverImgUrl }} />
-          <Card.Title title={course.name} />
-          <Card.Content>
-            <Text variant="bodyLarge" style={styles.description}>
-              {course.description}
-            </Text>
-            <Text variant="headlineSmall" style={styles.lessonsTitle}>
-              Lessons ({course.lessons?.length || 0})
-            </Text>
-            {course.lessons?.map((lesson) => (
-              <Card key={lesson.id} style={styles.lessonCard}>
-                <Card.Content>
-                  <Text variant="titleMedium">{lesson.name}</Text>
-                  <Text variant="bodyMedium">{lesson.description}</Text>
-                </Card.Content>
-              </Card>
-            ))}
-            <Text variant="bodyMedium" style={styles.todo}>
-              TODO: Add video player and lesson navigation
-            </Text>
-          </Card.Content>
+      {/* Hero Section */}
+      <View style={styles.heroSection}>
+        <Card style={styles.heroCard}>
+          <Card.Cover 
+            source={{ uri: course.coverImgUrl }} 
+            style={styles.heroImage}
+          />
         </Card>
+        <View style={styles.titleSection}>
+          <Text variant="headlineLarge" style={styles.courseTitle}>
+            {course.name}
+          </Text>
+          <Text variant="bodyLarge" style={styles.courseDescription}>
+            {course.description}
+          </Text>
+        </View>
+      </View>
+
+      {/* Lessons Section */}
+      <View style={styles.lessonsSection}>
+        <Text variant="headlineSmall" style={styles.lessonsTitle}>
+          Aulas ({course.lessons?.length || 0})
+        </Text>
+        
+        {course.lessons?.map((lesson, index) => {
+          const videoId = getYouTubeVideoId(lesson.videoUrl);
+          
+          return (
+            <Card key={lesson.id} style={styles.lessonCard}>
+              <Card.Content style={styles.lessonContent}>
+                <Text variant="titleMedium" style={styles.lessonNumber}>
+                  Aula {index + 1}
+                </Text>
+                <Text variant="titleLarge" style={styles.lessonTitle}>
+                  {lesson.name}
+                </Text>
+                <Text variant="bodyMedium" style={styles.lessonDescription}>
+                  {lesson.description}
+                </Text>
+                
+                {/* YouTube Player */}
+                <View style={styles.videoPlayerContainer}>
+                  {videoId ? (
+                    <YoutubePlayer
+                      height={200}
+                      videoId={videoId}
+                      onError={(e: string) => console.log('YouTube player error:', e)}
+                    />
+                  ) : (
+                    <View style={styles.videoError}>
+                                             <Text variant="bodySmall" style={styles.errorText}>
+                         ❌ URL do YouTube inválida
+                       </Text>
+                      <Text variant="bodySmall" style={styles.videoUrl}>
+                        {lesson.videoUrl}
+                      </Text>
+                    </View>
+                  )}
+                </View>
+              </Card.Content>
+            </Card>
+          );
+        })}
       </View>
     </ScrollView>
   );
@@ -64,29 +113,88 @@ export default function CourseDetails() {
 const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
+    backgroundColor: '#f5f5f5',
   },
   container: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 16,
   },
-  card: {
+  heroSection: {
+    marginBottom: 20,
+  },
+  heroCard: {
+    borderRadius: 0,
+    elevation: 0,
+  },
+  heroImage: {
+    height: 250,
+    borderRadius: 0,
+  },
+  titleSection: {
+    padding: 20,
+    backgroundColor: 'white',
+  },
+  courseTitle: {
+    fontWeight: 'bold',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  courseDescription: {
+    textAlign: 'center',
+    lineHeight: 24,
+  },
+  lessonsSection: {
+    paddingHorizontal: 16,
+    paddingBottom: 20,
+  },
+  lessonsTitle: {
+    marginBottom: 15,
+    fontWeight: 'bold',
+  },
+  lessonCard: {
+    marginBottom: 16,
     borderRadius: 12,
     elevation: 4,
   },
-  description: {
-    marginBottom: 20,
+  lessonContent: {
+    padding: 16,
   },
-  lessonsTitle: {
-    marginTop: 20,
-    marginBottom: 10,
+  lessonNumber: {
+    color: '#666',
+    marginBottom: 4,
   },
-  lessonCard: {
+  lessonTitle: {
+    fontWeight: 'bold',
     marginBottom: 8,
-    elevation: 2,
   },
-  todo: {
-    marginTop: 20,
-    fontStyle: 'italic',
+  lessonDescription: {
+    marginBottom: 16,
+    lineHeight: 20,
+  },
+  videoPlayerContainer: {
+    borderRadius: 8,
+    overflow: 'hidden',
+    backgroundColor: '#000',
+  },
+  videoError: {
+    backgroundColor: '#f0f0f0',
+    borderRadius: 8,
+    padding: 16,
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#ddd',
+    borderStyle: 'dashed',
+  },
+  errorText: {
+    fontSize: 16,
+    marginBottom: 8,
+    color: '#d32f2f',
+  },
+  videoUrl: {
+    color: '#666',
+    fontSize: 12,
     textAlign: 'center',
   },
 }); 
