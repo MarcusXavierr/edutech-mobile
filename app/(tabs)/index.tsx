@@ -1,15 +1,24 @@
-import { Text, View, StyleSheet } from "react-native"
-import { Button } from "react-native-paper"
+import CardContainer from "@/components/CardContainer"
+import LoadingSplash from "@/components/LoadingSplash"
 import { useCourseStore } from "@/store/course"
+import { useEffect } from "react"
+import { StyleSheet, View } from "react-native"
+import { Text } from 'react-native-paper'
 
 export default function Index() {
-  const courseStore = useCourseStore()
+  const { courses, isLoading, loadCourses } = useCourseStore()
+
+  useEffect(() => {
+    loadCourses()
+  }, [])
+
   return (
     <View style={styles.view}>
-      <Text>TODO: Implementar a página inicial</Text>
-      <Button mode="contained" onPress={courseStore.loadCourses}>
-        Clica aqui
-      </Button>
+      <LoadingSplash visible={isLoading} />
+      <Text variant="headlineMedium">Cursos</Text>
+      {
+          courses.map((course) => <CardContainer key={course.id} course={course} />)
+      }
     </View>
   )
 }
