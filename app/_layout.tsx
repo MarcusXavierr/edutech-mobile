@@ -2,8 +2,7 @@ import { AuthProvider, useAuth } from "@/store/auth-context";
 import { Stack, useRouter } from "expo-router";
 import React, { ReactNode, useEffect } from "react";
 import Toast from 'react-native-toast-message'
-import "../global.css";
-import ToastComponent from "@/components/ToastEvent";
+// import "../global.css";
 
 function RouteGuard({ children }: { children: ReactNode }) {
   const router = useRouter();
@@ -34,9 +33,7 @@ export default function RootLayout() {
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         </Stack>
       </RouteGuard>
-      <ToastComponent>
-        <Toast/>
-      </ToastComponent>
+      <Toast/>
     </AuthProvider>
   );
 }

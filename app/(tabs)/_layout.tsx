@@ -1,8 +1,25 @@
 import { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs"
 import FontAwesome from "@expo/vector-icons/FontAwesome"
 import { Tabs } from "expo-router"
+import event from "@/utils/event"
+import { useAuth } from "@/store/auth-context"
+import { useEffect } from "react"
 
 export default function TabsLayout() {
+  const authStore = useAuth()
+
+  useEffect(() => {
+    event.on('shouldLogout', async (logout) => {
+      if (logout) {
+        await authStore.signOut()
+      }
+    })
+
+    return () => {
+      event.off('shouldLogout')
+    }
+  }, [authStore])
+
   return (
     <>
       <Tabs screenOptions={tabOptions}>

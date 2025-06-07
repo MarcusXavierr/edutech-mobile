@@ -1,5 +1,6 @@
 import { createHttpError, type HttpError } from '@/types/http-error'
 import axios, { type AxiosInstance } from 'axios'
+import event from '@/utils/event'
 
 const httpAPI: AxiosInstance = axios.create()
 // BUG: ta undefined
@@ -32,6 +33,9 @@ httpAPI.interceptors.response.use(
       )
     }
 
+    if (httpError.status === 401) {
+      event.emit('shouldLogout', true)
+    }
     return Promise.reject(httpError)
   }
 )
