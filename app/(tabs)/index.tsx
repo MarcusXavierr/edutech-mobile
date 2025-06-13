@@ -20,7 +20,7 @@ export default function Index() {
       description: "Lógica, API e servidores",
       duration: "4 aulas",
       category: "Node / APIs",
-      route: "/tabs/categorias/back-end"
+      route: "/(tabs)/categorias/back-end"
     },
     {
       id: "3",
@@ -28,7 +28,7 @@ export default function Index() {
       description: "Guarde e consulte seus dados",
       duration: "4 aulas",
       category: "SQL / NoSQL",
-      route: "/tabs/categorias/banco"
+      route: "/(tabs)/categorias/banco-de-dados"
     },
     {
       id: "4",
@@ -36,7 +36,7 @@ export default function Index() {
       description: "Entenda o mundo com dados",
       duration: "4 aulas",
       category: "Big Data / BI",
-      route: "/tabs/categorias/dados"
+      route: "/(tabs)/categorias/data"
     },
   ];
 
