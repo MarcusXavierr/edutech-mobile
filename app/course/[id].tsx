@@ -1,18 +1,12 @@
 import { Course, useCourseStore } from '@/store/course';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Dimensions, ScrollView, StyleSheet, View } from 'react-native';
 import { Card, Text } from 'react-native-paper';
 import YoutubePlayer from 'react-native-youtube-iframe';
+import { getYouTubeVideoId } from '@/utils/youtube'
 
 const { width: screenWidth } = Dimensions.get('window');
-
-// Function to extract YouTube video ID from URL
-const getYouTubeVideoId = (url: string): string => {
-  const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
-  const match = url.match(regex);
-  return match ? match[1] : '';
-};
 
 export default function CourseDetails() {
   const { id } = useLocalSearchParams();
@@ -45,8 +39,8 @@ export default function CourseDetails() {
       {/* Hero Section */}
       <View style={styles.heroSection}>
         <Card style={styles.heroCard}>
-          <Card.Cover 
-            source={{ uri: course.coverImgUrl }} 
+          <Card.Cover
+            source={{ uri: course.coverImgUrl }}
             style={styles.heroImage}
           />
         </Card>
@@ -65,12 +59,12 @@ export default function CourseDetails() {
         <Text variant="headlineSmall" style={styles.lessonsTitle}>
           Aulas ({course.lessons?.length || 0})
         </Text>
-        
+
         {course.lessons?.map((lesson, index) => {
           const videoId = getYouTubeVideoId(lesson.videoUrl);
-          
+
           return (
-            <Card key={lesson.id} style={styles.lessonCard}>
+            <Card key={lesson.id} style={styles.lessonCard} onPress={() => { router.push(`/course/lesson/${lesson.id}`) }}>
               <Card.Content style={styles.lessonContent}>
                 <Text variant="titleMedium" style={styles.lessonNumber}>
                   Aula {index + 1}
@@ -81,19 +75,19 @@ export default function CourseDetails() {
                 <Text variant="bodyMedium" style={styles.lessonDescription}>
                   {lesson.description}
                 </Text>
-                
+
                 {/* YouTube Player */}
                 <View style={styles.videoPlayerContainer}>
-                  {videoId ? (
+                  {videoId.success ? (
                     <YoutubePlayer
                       height={200}
-                      videoId={videoId}
+                      videoId={videoId.data}
                       onError={(e: string) => console.log('YouTube player error:', e)}
                     />
                   ) : (
                     <View style={styles.videoError}>
                                              <Text variant="bodySmall" style={styles.errorText}>
-                         ❌ URL do YouTube inválida
+                         ❌ {videoId.error.message}
                        </Text>
                       <Text variant="bodySmall" style={styles.videoUrl}>
                         {lesson.videoUrl}
@@ -197,4 +191,4 @@ const styles = StyleSheet.create({
     fontSize: 12,
     textAlign: 'center',
   },
-}); 
+});

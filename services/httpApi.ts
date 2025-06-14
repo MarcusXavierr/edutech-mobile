@@ -5,7 +5,7 @@ import event from '@/utils/event'
 const httpAPI: AxiosInstance = axios.create()
 // BUG: ta undefined
 // httpAPI.defaults.baseURL = process.env.BASE_API_URL
-httpAPI.defaults.baseURL = "http://18.209.31.113:8080"
+httpAPI.defaults.baseURL = "http://3.81.33.22:8080"
 
 httpAPI.interceptors.request.use(
   (config) => {

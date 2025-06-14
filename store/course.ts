@@ -21,7 +21,16 @@ export const useCourseStore = create<CourseStore>((set, get) => ({
   getCourseById: (id: number) => {
     const { courses } = get()
     return courses.find(course => course.id === id)
-  }
+  },
+  // TODO: Reescrever de forma mais performática
+  getLessonById: (id: number) => {
+    const { courses } = get()
+    for (const course of courses) {
+      for (const lesson of course.lessons) {
+        if (lesson.id === id) return lesson
+      }
+    }
+  },
 }))
 
 type CourseStore = {
@@ -30,6 +39,7 @@ type CourseStore = {
   setCourses: (courses: Course[]) => void,
   loadCourses: () => Promise<void>,
   getCourseById: (id: number) => Course | undefined
+  getLessonById: (id: number) => Lesson | undefined
 }
 
 export type Course = {
