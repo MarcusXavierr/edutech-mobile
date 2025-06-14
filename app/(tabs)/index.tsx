@@ -1,6 +1,6 @@
-import { ScrollView, Text, StyleSheet } from "react-native";
-import LessonsCarousel from "./carrosel";
 import { useRouter } from "expo-router";
+import { ScrollView, StyleSheet, Text } from "react-native";
+import LessonsCarousel from "./carrosel";
 
 export default function Index() {
   const router = useRouter();
@@ -12,7 +12,7 @@ export default function Index() {
       description: "Aprenda interfaces incríveis",
       duration: "4 aulas",
       category: "React / UI",
-      route: "/(tabs)/categorias/front-end"
+      route: "/categorias/front-end"
     },
     {
       id: "2",
@@ -20,7 +20,7 @@ export default function Index() {
       description: "Lógica, API e servidores",
       duration: "4 aulas",
       category: "Node / APIs",
-      route: "/(tabs)/categorias/back-end"
+      route: "/categorias/back-end"
     },
     {
       id: "3",
@@ -28,7 +28,7 @@ export default function Index() {
       description: "Guarde e consulte seus dados",
       duration: "4 aulas",
       category: "SQL / NoSQL",
-      route: "/(tabs)/categorias/banco-de-dados"
+      route: "/categorias/banco-de-dados"
     },
     {
       id: "4",
@@ -36,7 +36,7 @@ export default function Index() {
       description: "Entenda o mundo com dados",
       duration: "4 aulas",
       category: "Big Data / BI",
-      route: "/(tabs)/categorias/data"
+      route: "/categorias/data"
     },
   ];
 
