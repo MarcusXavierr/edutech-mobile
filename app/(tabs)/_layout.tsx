@@ -1,6 +1,6 @@
-import { Text } from "react-native";
 import { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs";
 import { Tabs } from "expo-router";
+import { Text } from "react-native";
 
 export default function TabsLayout() {
   return (
@@ -19,7 +19,7 @@ export default function TabsLayout() {
       />
 
       <Tabs.Screen
-        name="sobre-nos"
+        name="we"
         options={{
           title: "Sobre Nós",
           tabBarIcon: ({ color, focused }) => (
@@ -33,7 +33,6 @@ export default function TabsLayout() {
 
       <Tabs.Screen name="login" options={{ href: null }} />
       <Tabs.Screen name="carrosel" options={{ href: null }} />
-      <Tabs.Screen name="categorias/front-end" options={{ href: null }} />
     </Tabs>
   );
 }
