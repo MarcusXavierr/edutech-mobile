@@ -5,6 +5,7 @@ import { Dimensions, ScrollView, StyleSheet, View } from 'react-native';
 import { Card, Text } from 'react-native-paper';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import { getYouTubeVideoId } from '@/utils/youtube'
+import httpAPI from '@/services/httpApi'
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -12,6 +13,7 @@ export default function CourseDetails() {
   const { id } = useLocalSearchParams();
   const { getCourseById, loadCourses, courses } = useCourseStore();
   const [course, setCourse] = useState<Course | undefined>();
+  const baseUrl = httpAPI.defaults.baseURL
 
   useEffect(() => {
     const courseId = Number(id);
@@ -40,7 +42,7 @@ export default function CourseDetails() {
       <View style={styles.heroSection}>
         <Card style={styles.heroCard}>
           <Card.Cover
-            source={{ uri: course.coverImgUrl }}
+            source={{ uri: `${baseUrl}${course.coverImgUrl}` }}
             style={styles.heroImage}
           />
         </Card>

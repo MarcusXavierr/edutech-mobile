@@ -9,10 +9,8 @@ export const useCourseStore = create<CourseStore>((set, get) => ({
   loadCourses: async () => {
     set({isLoading: true})
     const res = await getAllCourses()
-    console.log('res', res)
     if (res.success) {
       set({courses: res.data})
-      successToast('Courses loaded successfully')
     } else {
       errorToast(res.error.userMessage)
     }
@@ -31,7 +29,7 @@ export const useCourseStore = create<CourseStore>((set, get) => ({
       }
     }
   },
-  
+
   /**
    * Gets the course that contains a specific lesson
    */

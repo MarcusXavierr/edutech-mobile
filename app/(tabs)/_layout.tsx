@@ -1,9 +1,9 @@
 import { useAuth } from "@/store/auth-context"
 import event from "@/utils/event"
-import FontAwesome from "@expo/vector-icons/FontAwesome"
 import { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs"
 import { Tabs } from "expo-router"
-import { useEffect } from "react"
+import React, { useEffect } from "react"
+import { Text, TouchableOpacity } from "react-native"
 
 export default function TabsLayout() {
   const authStore = useAuth()
@@ -20,6 +20,10 @@ export default function TabsLayout() {
     }
   }, [authStore])
 
+  const handleCustomAction = async () => {
+    await authStore.signOut()
+  }
+
   return (
     <>
       <Tabs screenOptions={tabOptions}>
@@ -28,17 +32,38 @@ export default function TabsLayout() {
           options={{
             title: "Home",
             tabBarIcon: ({ color }) => {
-              return <FontAwesome name="home" size={24} color={color} />
+              return <Text style={{ fontSize: 24, color }}>🏠</Text>
             },
           }}
         />
         <Tabs.Screen
           name="we"
           options={{
-            title: "User",
+            title: "Sobre nós",
             tabBarIcon: ({ color }) => {
-              return <FontAwesome name="user" size={24} color={color} />
+              return <Text style={{ fontSize: 24, color }}>👥</Text>
             },
+          }}
+        />
+        <Tabs.Screen
+          name="custom-action"
+          options={{
+            title: "Logout",
+            tabBarIcon: ({ color }) => {
+              return <Text style={{ fontSize: 24, color }}>👋</Text>
+            },
+            tabBarButton: (props) => (
+              <TouchableOpacity
+                onPress={handleCustomAction}
+                style={props.style}
+                accessibilityRole={props.accessibilityRole}
+                accessibilityState={props.accessibilityState}
+                accessibilityLabel={props.accessibilityLabel}
+                testID={props.testID}
+              >
+                {props.children}
+              </TouchableOpacity>
+            ),
           }}
         />
       </Tabs>

@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import { Pressable, ScrollView, StyleSheet, Text } from "react-native";
-import LessonsCarousel from "../(tabs)/carrosel";
+import LessonsCarousel from "./carrosel";
 
 const backEndLessons = [
   {
