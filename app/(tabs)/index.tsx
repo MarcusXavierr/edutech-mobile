@@ -2,7 +2,7 @@ import CardContainer from "@/components/CardContainer"
 import LoadingSplash from "@/components/LoadingSplash"
 import { useCourseStore } from "@/store/course"
 import { useEffect } from "react"
-import { StyleSheet, View } from "react-native"
+import { ScrollView, StyleSheet } from "react-native"
 import { Text } from 'react-native-paper'
 
 export default function Index() {
@@ -13,19 +13,21 @@ export default function Index() {
   }, [])
 
   return (
-    <View style={styles.view}>
+    <ScrollView style={styles.view} contentContainerStyle={styles.contentContainer}>
       <LoadingSplash visible={isLoading} />
       <Text variant="headlineMedium">Cursos</Text>
       {
           courses.map((course) => <CardContainer key={course.id} course={course} />)
       }
-    </View>
+    </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
   view: {
     flex: 1,
+  },
+  contentContainer: {
     justifyContent: "center",
     alignItems: "center",
   },
