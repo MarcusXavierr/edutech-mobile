@@ -4,7 +4,7 @@ import { type HttpError } from "@/types/http-error"
 import { type Result } from "@/types/result"
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { createContext, useContext, useEffect, useState } from "react"
-import httpApi from "./httpApi"
+import httpApi from "../services/httpApi"
 
 type AuthContextType = {
   user?: User,
@@ -98,7 +98,7 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
     const result = await register(payload)
 
     if (result.success) {
-      await saveAuthData(result.data.accessToken, result.data.user)
+      await saveAuthData(result.data.access_token, result.data.user)
     }
 
     return result
@@ -111,7 +111,7 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
     const result = await login(payload)
 
     if (result.success) {
-      await saveAuthData(result.data.accessToken, result.data.user)
+      await saveAuthData(result.data.access_token, result.data.user)
     }
 
     return result

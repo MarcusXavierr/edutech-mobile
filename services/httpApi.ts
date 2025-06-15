@@ -1,14 +1,15 @@
 import { createHttpError, type HttpError } from '@/types/http-error'
 import axios, { type AxiosInstance } from 'axios'
+import event from '@/utils/event'
 
 const httpAPI: AxiosInstance = axios.create()
 // BUG: ta undefined
 // httpAPI.defaults.baseURL = process.env.BASE_API_URL
-httpAPI.defaults.baseURL = "https://3a5c-2804-6660-ff21-6700-1477-4047-d220-2.ngrok-free.app"
+httpAPI.defaults.baseURL = "http://3.81.33.22:8080"
 
 httpAPI.interceptors.request.use(
   (config) => {
-    console.log('vou configurar os headers', httpAPI.defaults.baseURL)
+    console.log('vou configurar os headers', httpAPI.defaults.baseURL, config.url)
     return config
   }
 )
@@ -32,6 +33,9 @@ httpAPI.interceptors.response.use(
       )
     }
 
+    if (httpError.status === 401) {
+      event.emit('shouldLogout', true)
+    }
     return Promise.reject(httpError)
   }
 )

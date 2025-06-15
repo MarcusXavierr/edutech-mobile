@@ -1,7 +1,8 @@
-import { AuthProvider, useAuth } from "@/plugins/auth-context";
+import { AuthProvider, useAuth } from "@/store/auth-context";
 import { Stack, useRouter } from "expo-router";
 import React, { ReactNode, useEffect } from "react";
-import "../global.css";
+import Toast from 'react-native-toast-message'
+// import "../global.css";
 
 function RouteGuard({ children }: { children: ReactNode }) {
   const router = useRouter();
@@ -28,10 +29,18 @@ export default function RootLayout() {
   return (
     <AuthProvider>
       <RouteGuard>
-        <Stack>
+        <Stack screenOptions={tabOptions}>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         </Stack>
       </RouteGuard>
+      <Toast/>
     </AuthProvider>
   );
 }
+
+
+// TODO: Tipar melhor
+const tabOptions = {
+  headerTitleAlign: "center",
+  headerTitle: 'Edutech'
+} as any

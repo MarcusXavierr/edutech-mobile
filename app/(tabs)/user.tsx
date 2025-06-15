@@ -1,6 +1,6 @@
-import { useAuth } from "@/plugins/auth-context"
-import { View, StyleSheet } from "react-native";
-import { Text, Button } from 'react-native-paper'
+import { useAuth } from "@/store/auth-context";
+import { StyleSheet, View } from "react-native";
+import { Button, Text } from 'react-native-paper';
 
 export default function LoginScreen() {
   const { signOut } = useAuth()
@@ -9,7 +9,7 @@ export default function LoginScreen() {
     <View style={styles.container}>
       <View style={styles.content}>
         <Text variant="headlineMedium" style={styles.title}>
-          Some daqui meo
+          Página temporária do usuário
         </Text>
         <Button onPress={signOut} mode="contained">
           Fazer Logout
